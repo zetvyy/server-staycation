@@ -1,0 +1,64 @@
+<!-- Modal -->
+<div
+  class="modal fade"
+  id="updateBankModal"
+  tabindex="-1"
+  aria-labelledby="updateBankModalLabel"
+  aria-hidden="true"
+>
+  <div class="modal-dialog">
+    <div class="modal-content">
+      <div class="modal-header">
+        <h5 class="modal-title" id="updateBankModalLabel">Update Bank</h5>
+        <button
+          type="button"
+          class="close"
+          data-dismiss="modal"
+          aria-label="Close"
+        >
+          <span aria-hidden="true">&times;</span>
+        </button>
+      </div>
+      <form
+        action="/admin/bank?_method=PUT"
+        method="POST"
+        enctype="multipart/form-data"
+      >
+        <div class="modal-body">
+          <div class="form-group nameBank">
+            <label for="exampleInputName">Name Bank</label>
+            <input
+              type="text"
+              class="form-control nameBank"
+              placeholder="Enter name"
+              name="nameBank"
+              required
+            />
+            <label for="exampleInputName">Nomor Rekening</label>
+            <input
+              type="text"
+              class="form-control nomorRekening"
+              placeholder="Enter nomer rekening"
+              name="nomorRekening"
+              required
+            />
+            <label for="exampleInputName">Name</label>
+            <input
+              type="text"
+              class="form-control name"
+              placeholder="Enter name"
+              name="name"
+              required
+            />
+            <label for="exampleInputName">Upload Image</label>
+            <input type="file" class="form-control image" name="image" />
+          </div>
+        </div>
+        <div class="modal-footer">
+          <input type="hidden" class="id" name="id" />
+          <button type="submit" class="btn btn-primary">Update</button>
+        </div>
+      </form>
+    </div>
+  </div>
+</div>
