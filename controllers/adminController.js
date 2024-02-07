@@ -3,6 +3,7 @@ const Bank = require("../model/bank");
 const Item = require("../model/item");
 const Image = require("../model/image");
 const Feature = require("../model/Feature");
+const Activity = require("../model/Activity");
 
 const fs = require("fs-extra");
 const path = require("path");
@@ -324,11 +325,14 @@ module.exports = {
       const alert = { message: allertMessage, status: allertStatus };
 
       const feature = await Feature.find({ itemId: itemId });
+      const activity = await Activity.find({ itemId: itemId });
+
       res.render("admin/item/detail_item/view_detail_item", {
         title: "Staycation | Detail Item",
         alert,
         itemId,
         feature,
+        activity,
       });
     } catch (error) {
       req.flash("alertMessage", `${error.message}`);
@@ -380,7 +384,7 @@ module.exports = {
         feature.qty = qty;
         feature.imageUrl = `images/${req.file.filename}`;
         await feature.save();
-        req.flash("alertMessage", "Success Edit Category");
+        req.flash("alertMessage", "Success Edit Feature");
         req.flash("alertStatus", "success");
         res.redirect(`/admin/item/show-detail-item/${itemId}`);
       }
@@ -405,6 +409,83 @@ module.exports = {
       await fs.unlink(path.join(`public/${feature.imageUrl}`));
       await feature.deleteOne();
       req.flash("alertMessage", "Success Delete Feature");
+      req.flash("alertStatus", "success");
+      res.redirect(`/admin/item/show-detail-item/${itemId}`);
+    } catch (error) {
+      req.flash("alertMessage", `${error.message}`);
+      req.flash("alertStatus", "danger");
+      res.redirect(`/admin/item/show-detail-item/${itemId}`);
+    }
+  },
+  addActivity: async (req, res) => {
+    const { name, type, itemId } = req.body;
+    try {
+      if (!req.file) {
+        req.flash("alertMessage", `Image not found`);
+        req.flash("alertStatus", "danger");
+        res.redirect(`/admin/item/show-detail-item/${itemId}`);
+      }
+      const activity = await Activity.create({
+        name,
+        type,
+        itemId,
+        imageUrl: `images/${req.file.filename}`,
+      });
+
+      const item = await Item.findOne({ _id: itemId });
+      item.activityId.push({ _id: activity._id });
+      await item.save();
+      req.flash("alertMessage", "Success Add Activity");
+      req.flash("alertStatus", "success");
+      res.redirect(`/admin/item/show-detail-item/${itemId}`);
+    } catch (error) {
+      req.flash("alertMessage", `${error.message}`);
+      req.flash("alertStatus", "danger");
+      res.redirect(`/admin/item/show-detail-item/${itemId}`);
+    }
+  },
+  editActivity: async (req, res) => {
+    const { id, name, type, itemId } = req.body;
+    try {
+      const activity = await Activity.findOne({ _id: id });
+      if (req.file == undefined) {
+        activity.name = name;
+        activity.type = type;
+        await activity.save();
+        req.flash("alertMessage", "Success Edit activity");
+        req.flash("alertStatus", "success");
+        res.redirect(`/admin/item/show-detail-item/${itemId}`);
+      } else {
+        await fs.unlink(path.join(`public/${activity.imageUrl}`));
+        activity.name = name;
+        activity.type = type;
+        activity.imageUrl = `images/${req.file.filename}`;
+        await activity.save();
+        req.flash("alertMessage", "Success Edit Activity");
+        req.flash("alertStatus", "success");
+        res.redirect(`/admin/item/show-detail-item/${itemId}`);
+      }
+    } catch (error) {
+      req.flash("alertMessage", `${error.message}`);
+      req.flash("alertStatus", "danger");
+      res.redirect(`/admin/item/show-detail-item/${itemId}`);
+    }
+  },
+  deleteAcivity: async (req, res) => {
+    const { id, itemId } = req.params;
+    try {
+      const activity = await Activity.findOne({ _id: id });
+
+      const item = await Item.findOne({ _id: itemId }).populate("activityId");
+      for (let i = 0; i < item.activityId.length; i++) {
+        if (item.activityId[i]._id.toString() === activity._id.toString()) {
+          item.activityId.pull({ _id: activity._id });
+          await item.save();
+        }
+      }
+      await fs.unlink(path.join(`public/${activity.imageUrl}`));
+      await activity.deleteOne();
+      req.flash("alertMessage", "Success Delete activity");
       req.flash("alertStatus", "success");
       res.redirect(`/admin/item/show-detail-item/${itemId}`);
     } catch (error) {

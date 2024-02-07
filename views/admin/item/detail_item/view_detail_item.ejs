@@ -65,6 +65,8 @@
         <!-- End of Main Content -->
 
         <%- include('show_modal_feature.ejs') %>
+        <%- include('show_modal_activity.ejs') %>
+
         <%- include('../../../parts/footer.ejs') %>
       </div>
       <!-- End of Content Wrapper -->
@@ -153,7 +155,20 @@
           $('.qty').val(qty)
 
 
-      })
+      });
+
+      $('#dataTableActivity').on('click', '.button-update', function() {
+          let id = $(this).data('id')
+          let name = $(this).data('name')
+          let type = $(this).data('type')
+
+          $('#updateActivityModal').modal('show')
+          $('.id').val(id)
+          $('.name').val(name)
+          $('.type').val(type)
+
+        });
+
     </script>
   
   </body>
