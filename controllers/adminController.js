@@ -391,9 +391,18 @@ module.exports = {
     }
   },
   deleteFeature: async (req, res) => {
+    const { id, itemId } = req.params;
     try {
-      const { id, itemId } = req.params;
       const feature = await Feature.findOne({ _id: id });
+
+      const item = await Item.findOne({ _id: itemId }).populate("featureId");
+      for (let i = 0; i < item.featureId.length; i++) {
+        if (item.featureId[i]._id.toString() === feature._id.toString()) {
+          item.featureId.pull({ _id: feature._id });
+          await item.save();
+        }
+      }
+      await fs.unlink(path.join(`public/${feature.imageUrl}`));
       await feature.deleteOne();
       req.flash("alertMessage", "Success Delete Feature");
       req.flash("alertStatus", "success");
