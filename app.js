@@ -11,6 +11,7 @@ mongoose.connect(
   "mongodb+srv://athallahzaidandev:Idan123@cluster0.njiqqzk.mongodb.net/staycation?retryWrites=true&w=majority&appName=Cluster0"
 );
 const methodOverride = require("method-override");
+const serverless = require("serverless-http");
 
 var indexRouter = require("./routes/index");
 var usersRouter = require("./routes/users");
@@ -67,4 +68,5 @@ app.listen(8000, function () {
   console.log("info", "Server is running at port : " + 8000);
 });
 
+export const handler = serverless(app);
 module.exports = app;
