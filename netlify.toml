@@ -5,4 +5,4 @@
   force = true
   from = "/admin/*"
   status = 200
-  to = "/.netlify/functions/api/:splat"
+  to = "/views/admin/index.ejs"
