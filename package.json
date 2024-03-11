@@ -5,7 +5,7 @@
   "scripts": {
     "start": "node ./bin/www",
     "dev": "nodemon app.js",
-    "build": "netlify build"
+    "build": "npm run netlify build"
   },
   "dependencies": {
     "@netlify/functions": "^2.6.0",
