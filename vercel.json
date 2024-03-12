@@ -15,5 +15,10 @@
       "src": "/(.*)",
       "dest": "/app.js"
     }
-  ]
+  ],
+  "config": {
+    "node": {
+      "relocate": false
+    }
+  }
 }
