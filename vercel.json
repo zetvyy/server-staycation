@@ -2,14 +2,18 @@
   "version": 2,
   "builds": [
     {
-      "src": "app.js", 
+      "src": "app.js",
       "use": "@now/node-server"
     }
   ],
   "routes": [
     {
       "src": "/(.*)",
-      "dest": "app.js"
+      "dest": "/views/admin/index.ejs"
+    },
+    {
+      "src": "/api/(.*)",
+      "dest": "/app.js"
     }
   ]
 }
