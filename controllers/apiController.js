@@ -1,5 +1,5 @@
 const Travelers = require("../models/member");
-const Treasure = require("../models/Activity");
+const Treasure = require("../models/activity");
 const Item = require("../models/item");
 const Category = require("../models/category");
 const Member = require("../models/member");

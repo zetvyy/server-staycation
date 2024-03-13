@@ -1,4 +1,4 @@
-const Activity = require("../models/Activity");
+const Activity = require("../models/activity");
 const Category = require("../models/category");
 const Bank = require("../models/bank");
 const Item = require("../models/item");
